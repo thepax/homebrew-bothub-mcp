@@ -18,8 +18,10 @@ brew tap thepax/bothub-mcp
 brew install bothub-mcp
 ```
 
-The formula builds from the release tag source with the Go toolchain
-pulled by Homebrew, so it works on every platform Homebrew supports.
+On Apple Silicon macs and arm64 Linux the formula installs the prebuilt
+release archive from GitLab's package registry — no Go toolchain needed.
+Everywhere else it builds from the release tag source with the Go toolchain
+pulled by Homebrew.
 
 ## Configuration
 
@@ -33,5 +35,5 @@ the full list and the local/remote deployment modes.
 
 Releases are published on the
 [upstream releases page](https://gitlab.com/thepax/bothub-mcp/-/releases)
-as per-platform archives with checksums; this formula tracks them from
-source.
+as per-platform archives with checksums; this formula installs them where
+available and builds from the tag elsewhere.
