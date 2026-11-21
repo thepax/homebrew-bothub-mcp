@@ -20,9 +20,13 @@ class BothubMcp < Formula
     depends_on "go" => :build
   end
 
+  # GitLab's anonymous API and web feeds are aggressively rate-limited
+  # (HTTP 429), so version discovery goes through plain git: ls-remote on
+  # tags is exempt from the API throttle.
   livecheck do
-    url "https://gitlab.com/api/v4/projects/thepax%2Fbothub-mcp/releases"
-    regex(/"tag_name":\s*"v?(\d+(?:\.\d+)+)"/i)
+    url "https://gitlab.com/thepax/bothub-mcp.git"
+    regex(/^v?(\d+(?:\.\d+)+)$/i)
+    strategy :git
   end
 
   def install
