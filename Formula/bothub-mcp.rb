@@ -1,22 +1,22 @@
 class BothubMcp < Formula
   desc "MCP server for BotHub: image and music generation with local preparation and explicit paid execution"
   homepage "https://gitlab.com/thepax/bothub-mcp"
-  version "1.15.1"
+  version "1.17.0"
   license "AGPL-3.0-only"
 
-  # Releases publish prebuilt archives to GitLab's generic package registry:
+  # Releases publish prebuilt archives with permanent download links:
   # darwin/arm64 and linux/arm64 tar.gz, checksums in the release's
   # SHA256SUMS.txt. Platforms without a prebuilt archive — Intel macs,
   # amd64 linux — fall back to building the release tag from source.
   if OS.mac? && Hardware::CPU.arm?
-    url "https://gitlab.com/api/v4/projects/thepax%2Fbothub-mcp/packages/generic/bothub-mcp/v#{version}/bothub-mcp-v#{version}-darwin-arm64.tar.gz"
-    sha256 "97abfa77c0ca553698b0841714da5db4786f6bfc4723a8d1f325438974666898"
+    url "https://gitlab.com/thepax/bothub-mcp/-/releases/v#{version}/downloads/bothub-mcp-v#{version}-darwin-arm64.tar.gz"
+    sha256 "f67e5bba310957184991c554cadaa68be6b19722eb3efb093b9f65124af7c421"
   elsif OS.linux? && Hardware::CPU.arm?
-    url "https://gitlab.com/api/v4/projects/thepax%2Fbothub-mcp/packages/generic/bothub-mcp/v#{version}/bothub-mcp-v#{version}-linux-arm64.tar.gz"
-    sha256 "ec66b5d06d1b63fecff148d0d25d3d5cac454e1841b2b80007256885bc3bb911"
+    url "https://gitlab.com/thepax/bothub-mcp/-/releases/v#{version}/downloads/bothub-mcp-v#{version}-linux-arm64.tar.gz"
+    sha256 "b20edb9d01c2f6028f19df7499fb4f67a85c394de1d04da77388d0b04d1a21a3"
   else
     url "https://gitlab.com/thepax/bothub-mcp/-/archive/v#{version}/bothub-mcp-v#{version}.tar.gz"
-    sha256 "8e0d779a63b17b672467e21288e4787120779c6d836bd5a9779cee5312a8c14b"
+    sha256 "1e29ccb0b3d317f38ad0cde1fc654b62db1e01df228d55f568bcbb38713b580c"
     depends_on "go" => :build
   end
 
@@ -41,11 +41,7 @@ class BothubMcp < Formula
   end
 
   test do
-    # BOTHUB_MCP_KEY is validated first, so provide one to reach the
-    # BOTHUB_MCP_STORAGE_DIR check.
-    ENV.delete("BOTHUB_MCP_STORAGE_DIR")
-    ENV["BOTHUB_MCP_KEY"] = "test-key"
-    assert_match "BOTHUB_MCP_STORAGE_DIR is required",
-      shell_output("#{bin}/bothub-mcp 2>&1", 1)
+    # --version answers before any environment configuration is read.
+    assert_equal version, shell_output("#{bin}/bothub-mcp --version").strip
   end
 end
